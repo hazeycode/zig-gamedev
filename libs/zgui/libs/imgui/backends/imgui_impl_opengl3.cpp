@@ -148,6 +148,7 @@
 #define IMGL3W_IMPL
 #include "imgui_impl_opengl3_loader.h"
 #else // zig-gamedev: added gl decls
+#define GL_GLEXT_PROTOTYPES
 #include "opengl-decls.h"
 #endif
 
