@@ -27,7 +27,7 @@ typedef unsigned long long     khronos_uint64_t;
 #endif  // __khrplatform_h_
 
 #ifndef APIENTRY
-#define APIENTRY
+#define APIENTRY __attribute__((weak))
 #endif
 #ifndef APIENTRYP
 #define APIENTRYP APIENTRY *
