@@ -86,7 +86,7 @@ pub fn build(b: *std.Build) void {
 
 fn packagesCrossPlatform(b: *std.Build, options: Options) void {
     zsdl_pkg = zsdl.Package.build(b, .{});
-    zopengl_pkg = zopengl.Package.build(b, .{});
+    zopengl_pkg = zopengl.Package.build(b, options.target, options.optimize, .{});
     zmath_pkg = zmath.Package.build(b, .{});
     zpool_pkg = zpool.Package.build(b, .{});
     zmesh_pkg = zmesh.Package.build(b, options.target, options.optimize, .{});

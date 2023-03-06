@@ -5,18 +5,22 @@ pub const Package = struct {
         api: enum {
             raw,
             wrapper,
-        },
+        } = .raw,
     };
 
     options: Options,
     zopengl: *std.Build.Module,
     zopengl_options: *std.Build.Module,
+    zopengl_lib: *std.Build.CompileStep,
 
-    pub fn build(b: *std.Build, args: struct {
-        options: Options = .{
-            .api = .raw,
+    pub fn build(
+        b: *std.Build,
+        target: std.zig.CrossTarget,
+        optimize: std.builtin.Mode,
+        args: struct {
+            options: Options = .{},
         },
-    }) Package {
+    ) Package {
         const options_step = b.addOptions();
         inline for (std.meta.fields(Options)) |option_field| {
             const option_val = @field(args.options, option_field.name);
@@ -32,11 +36,24 @@ pub const Package = struct {
             },
         });
 
+        const zopengl_lib = b.addSharedLibrary(.{
+            .name = "zopengl",
+            .target = target,
+            .optimize = optimize,
+        });
+        zopengl_lib.addOptions("zopengl_options", options_step);
+        zopengl_lib.addObjectFile(thisDir() ++ "/src/zopengl.zig");
+
         return .{
             .options = args.options,
             .zopengl = zopengl,
             .zopengl_options = options,
+            .zopengl_lib = zopengl_lib,
         };
+    }
+
+    pub fn link(zopengl_pkg: Package, exe: *std.Build.CompileStep) void {
+        exe.linkLibrary(zopengl_pkg.zopengl_lib);
     }
 };
 
