@@ -149,7 +149,9 @@
 #include "imgui_impl_opengl3_loader.h"
 #else // zig-gamedev: added gl decls
 #define GL_GLEXT_PROTOTYPES
+extern "C" {
 #include "opengl-decls.h"
+}
 #endif
 
 // Vertex arrays are not supported on ES2/WebGL1 unless Emscripten which uses an extension
